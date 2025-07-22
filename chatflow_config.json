@@ -1,0 +1,24 @@
+{
+  "access_token": "pat_VLtGh3CriXyy0zTMQWIsQMAqcsUOCdSao25GYGLElXTqAKmQrhOL7wnPF20ABpp1",
+  "base_url": "https://api.coze.com",
+  "chatflow_config": {
+    "workflow_id": "7514923198020304901",
+    "app_id": null,
+    "bot_id": null,
+    "conversation_id": null,
+    "default_content": "你好呀",
+    "parameters": {},
+    "ext": {
+      "source": "coze_plugin",
+      "version": "1.0"
+    }
+  },
+  "retry_config": {
+    "max_retries": 3,
+    "retry_delay": 1
+  },
+  "timeout_config": {
+    "connect_timeout": 10,
+    "read_timeout": 30
+  }
+}

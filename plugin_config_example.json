@@ -1,0 +1,312 @@
+{
+  "plugin_name": "Coze工作流调用插件",
+  "description": "在coze.cn中调用coze.com工作流的完整插件",
+  "version": "1.0.0",
+  
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "user_input": {
+        "type": "string",
+        "description": "用户输入的消息内容",
+        "required": true,
+        "example": "请帮我写一首关于春天的诗"
+      },
+      "access_token": {
+        "type": "string",
+        "description": "Coze.com个人访问令牌",
+        "required": true,
+        "pattern": "^pat_",
+        "example": "pat_ZJFRWrFB89O1vAZVXrNR90Pv...",
+        "sensitive": true
+      },
+      "workflow_id": {
+        "type": "string",
+        "description": "工作流ID（数字格式）",
+        "required": true,
+        "pattern": "^[0-9]+$",
+        "example": "7514923198020304901"
+      },
+      "base_url": {
+        "type": "string",
+        "description": "API基础URL",
+        "required": false,
+        "default": "https://api.coze.com",
+        "example": "https://api.coze.com"
+      },
+      "app_id": {
+        "type": "string",
+        "description": "应用ID（可选）",
+        "required": false,
+        "example": "7372340208834617345"
+      },
+      "bot_id": {
+        "type": "string",
+        "description": "机器人ID（可选）",
+        "required": false,
+        "example": "7372340208834617346"
+      },
+      "conversation_id": {
+        "type": "string",
+        "description": "会话ID（可选）",
+        "required": false,
+        "example": "7372340208834617347"
+      },
+      "system_prompt": {
+         "type": "string",
+         "description": "系统提示词，用于指导AI的行为和回答风格",
+         "required": false,
+         "example": "你是一个专业的写作助手，请用优美的语言回答用户的问题。"
+       },
+       "parameters": {
+         "type": "object",
+         "description": "工作流参数（可选）",
+         "required": false,
+         "properties": {
+           "temperature": {
+             "type": "number",
+             "description": "生成温度",
+             "minimum": 0,
+             "maximum": 1,
+             "example": 0.7
+           },
+           "max_tokens": {
+             "type": "integer",
+             "description": "最大令牌数",
+             "minimum": 1,
+             "maximum": 4000,
+             "example": 1000
+           }
+         },
+         "example": {
+           "temperature": 0.7,
+           "max_tokens": 1000
+         }
+       }
+    }
+  },
+  
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string",
+        "description": "工作流执行结果或错误信息"
+      },
+      "success": {
+        "type": "boolean",
+        "description": "执行是否成功"
+      },
+      "error": {
+        "type": "boolean",
+        "description": "是否发生错误"
+      },
+      "timestamp": {
+        "type": "string",
+        "description": "执行时间戳",
+        "format": "date-time"
+      }
+    }
+  },
+  
+  "configuration_guide": {
+    "step1": {
+      "title": "获取个人访问令牌",
+      "instructions": [
+        "1. 登录 https://coze.com",
+        "2. 进入 个人设置 → API 密钥",
+        "3. 点击 创建新令牌",
+        "4. 设置令牌名称和权限：",
+        "   - ✅ Workflow.run (必需)",
+        "   - ✅ User.profile (用于连接测试)",
+        "5. 复制生成的令牌（格式：pat_xxxxxx...）"
+      ]
+    },
+    "step2": {
+      "title": "获取工作流ID",
+      "instructions": [
+        "1. 在 coze.com 中创建或选择一个工作流",
+        "2. 确保工作流已 发布",
+        "3. 复制工作流ID（通常是一串数字）",
+        "4. 示例：7514923198020304901"
+      ]
+    },
+    "step3": {
+      "title": "在coze.cn中配置插件",
+      "instructions": [
+        "1. 在coze.cn中创建新插件",
+        "2. 选择 自定义代码 类型",
+        "3. 复制 coze_plugin_complete.py 的完整代码",
+        "4. 配置输入参数（参考 input_schema）",
+        "5. 配置输出参数（参考 output_schema）",
+        "6. 保存并测试插件"
+      ]
+    }
+  },
+  
+  "usage_examples": {
+    "basic_text_generation": {
+      "description": "基础文本生成",
+      "input": {
+        "user_input": "请帮我写一首关于AI的诗",
+        "access_token": "pat_ZJFRWrFB89O1vAZVXrNR90Pv...",
+        "workflow_id": "7514923198020304901"
+      },
+      "expected_output": {
+        "message": "智能之光照未来，\n算法编织梦想来。\n数据海洋任遨游，\nAI助力展风采。",
+        "success": true,
+        "timestamp": "2024-12-19T10:30:00Z"
+      }
+    },
+    "advanced_with_parameters": {
+       "description": "带参数的高级调用",
+       "input": {
+         "user_input": "分析这段文本的情感倾向",
+         "access_token": "pat_ZJFRWrFB89O1vAZVXrNR90Pv...",
+         "workflow_id": "7514923198020304901",
+         "system_prompt": "你是一个专业的文本情感分析师，请客观准确地分析文本的情感倾向。",
+         "parameters": {
+           "temperature": 0.3,
+           "max_tokens": 500
+         }
+       },
+      "expected_output": {
+        "message": "根据分析，这段文本呈现积极的情感倾向...",
+        "success": true,
+        "timestamp": "2024-12-19T10:31:00Z"
+      }
+    },
+    "error_handling": {
+      "description": "错误处理示例",
+      "input": {
+        "user_input": "测试消息",
+        "access_token": "invalid_token",
+        "workflow_id": "7514923198020304901"
+      },
+      "expected_output": {
+        "message": "❌ 配置错误: access_token 格式错误，应以 pat_ 开头",
+        "error": true,
+        "timestamp": "2024-12-19T10:32:00Z"
+      }
+    }
+  },
+  
+  "troubleshooting": {
+    "common_errors": {
+      "authentication_failed": {
+        "error": "❌ 配置错误: access_token 格式错误",
+        "solutions": [
+          "检查令牌是否以 pat_ 开头",
+          "确认令牌完整且未截断",
+          "重新生成访问令牌"
+        ]
+      },
+      "workflow_not_found": {
+        "error": "❌ 工作流执行失败: API请求失败: 404",
+        "solutions": [
+          "确认工作流ID正确",
+          "确保工作流已发布",
+          "检查工作流权限设置"
+        ]
+      },
+      "network_error": {
+        "error": "❌ 网络连接错误",
+        "solutions": [
+          "检查网络连接",
+          "验证防火墙设置",
+          "稍后重试"
+        ]
+      },
+      "parameter_missing": {
+        "error": "❌ 配置错误: workflow_id 未配置",
+        "solutions": [
+          "检查所有必需参数是否设置",
+          "验证参数格式正确性",
+          "参考配置示例"
+        ]
+      }
+    }
+  },
+  
+  "security_notes": {
+    "token_security": [
+      "❌ 不要在代码中硬编码令牌",
+      "✅ 使用插件配置参数传递令牌",
+      "✅ 定期轮换访问令牌",
+      "✅ 限制令牌权限范围"
+    ],
+    "data_security": [
+      "不要在日志中记录敏感信息",
+      "验证用户输入防止注入攻击",
+      "使用HTTPS确保传输安全"
+    ]
+  },
+  
+  "performance_optimization": {
+    "best_practices": [
+      "连接复用：插件会自动复用HTTP连接",
+      "超时设置：默认30秒超时，可根据需要调整",
+      "错误重试：实现了基础的错误处理机制",
+      "日志记录：详细的执行日志便于调试"
+    ],
+    "monitoring": [
+      "监控API调用频率",
+      "跟踪响应时间",
+      "记录错误率",
+      "分析用户使用模式"
+    ]
+  },
+  
+  "testing": {
+    "basic_test": {
+      "description": "基础功能测试",
+      "input": {
+        "user_input": "测试消息",
+        "access_token": "你的实际令牌",
+        "workflow_id": "你的工作流ID"
+      }
+    },
+    "advanced_test": {
+       "description": "高级功能测试",
+       "input": {
+         "user_input": "复杂的测试场景",
+         "access_token": "你的实际令牌",
+         "workflow_id": "你的工作流ID",
+         "system_prompt": "你是一个测试助手，请详细分析用户的需求并提供专业建议。",
+         "parameters": {
+           "temperature": 0.8,
+           "max_tokens": 500
+         }
+       }
+     }
+  },
+  
+  "support": {
+    "getting_help": [
+      "查看错误日志 - 插件会提供详细的错误信息",
+      "检查配置 - 验证所有参数设置正确",
+      "测试连接 - 确认API连接正常",
+      "参考文档 - 查看完整的配置说明"
+    ],
+    "debugging_tips": [
+      "使用简单的测试输入验证基础功能",
+      "逐步添加可选参数测试高级功能",
+      "查看插件执行日志获取详细信息",
+      "对比成功和失败的调用参数"
+    ]
+  },
+  
+  "version_info": {
+    "current_version": "1.0.0",
+    "release_date": "2024-12-19",
+    "status": "稳定版本",
+    "features": [
+      "✅ 完整的工作流调用功能",
+      "✅ 个人访问令牌认证",
+      "✅ 完善的错误处理",
+      "✅ 详细的日志记录",
+      "✅ 灵活的参数配置",
+      "✅ 安全的数据处理"
+    ]
+  }
+}

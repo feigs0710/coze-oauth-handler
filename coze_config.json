@@ -1,0 +1,17 @@
+{
+  "personal_token": "pat_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "base_url": "https://api.coze.com",
+  "default_bot_id": "your_bot_id_here",
+  "default_user_id": "user123",
+  "timeout": 30,
+  "retry_count": 3,
+  "description": "Coze API配置文件 - 请将personal_token替换为您的实际个人访问令牌",
+  "setup_instructions": {
+    "step1": "登录 Coze 控制台 (https://www.coze.com)",
+    "step2": "进入 '设置' -> 'API密钥' 或 '开发者设置'",
+    "step3": "点击 '创建个人访问令牌'",
+    "step4": "设置令牌名称和权限范围",
+    "step5": "复制生成的令牌（以 'pat_' 开头）",
+    "step6": "将令牌替换上面的 personal_token 值"
+  }
+}
